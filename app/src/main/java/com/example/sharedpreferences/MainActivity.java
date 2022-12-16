@@ -8,6 +8,13 @@ import android.view.View;
 import android.widget.CheckBox;
 import android.widget.EditText;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+
+import java.lang.reflect.Type;
+import java.util.ArrayList;
+import java.util.List;
+
 public class MainActivity extends AppCompatActivity {
 
 
@@ -16,6 +23,26 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        //create gson object
+        Gson gson = new Gson();
+
+        Address address = new Address("Germany", "Berlin");
+
+        ArrayList<FamilyMember> family = new ArrayList<>();
+        family.add(new FamilyMember("wife", 30));
+        family.add(new FamilyMember("daughter", 5));
+
+        //turn object into string
+        Employee employee = new Employee("John", 30, "john@gmail.com", address, family);
+        String json = gson.toJson(employee);
+        String json2 = gson.toJson(family);
+
+        //turn string back to object
+        Employee employee2 = gson.fromJson(json, Employee.class);
+        Type familyType = new TypeToken<ArrayList<FamilyMember>>(){}.getType();
+        ArrayList<FamilyMember> family2 = gson.fromJson(json, familyType);
+
         // Retrieving the value using its keys the file name
         // must be same in both saving and retrieving the data
         SharedPreferences sh = getSharedPreferences("sharedpreferences", MODE_PRIVATE);
